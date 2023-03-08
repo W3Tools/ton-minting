@@ -54,6 +54,10 @@ cp .env.example .env && vi .env
     ```bash
     yarn deploy-collection
     ```
+-   ### 6.4: Update `.env` to set `COLLECTION_ADDRESS` to the address you just deployed
+    ```
+    COLLECTION_ADDRESS="xxxxxx"
+    ```
 -   ### 6.4: mint nft
     ```bash
     yarn deploy-nft
