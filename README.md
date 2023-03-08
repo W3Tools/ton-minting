@@ -39,3 +39,22 @@ cp .env.example .env && vi .env
     ```bash
     yarn deploy-nft-single
     ```
+
+## step6: How to deploy a nft via Collection
+
+-   ### 6.1: Compile the cell file of the nft contract
+    ```bash
+    yarn build-nft
+    ```
+-   ### 6.2: Compile the cell file of the collection contract
+    ```bash
+    yarn build-collection
+    ```
+-   ### 6.3: Deploy and initialize the collection contract
+    ```bash
+    yarn deploy-collection
+    ```
+-   ### 6.4: mint nft
+    ```bash
+    yarn deploy-nft
+    ```
