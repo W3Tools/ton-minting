@@ -19,7 +19,7 @@ export class CollectionMintNFT extends TonCenter {
         let bodyCell: Builder = new Builder();
         bodyCell.storeUint(CollectionOpCode.Mint, 32); // op code
         bodyCell.storeUint(0, 64); // query id -> for royalty
-        bodyCell.storeUint(1, 64); // index
+        bodyCell.storeUint(0, 64); // index
         bodyCell.storeCoins(toNano('0.01')); // amount
         bodyCell.storeRef(nftItemCell);
         return bodyCell.endCell();
@@ -30,7 +30,10 @@ export class CollectionMintNFT extends TonCenter {
 
         const bodyCell = this.getMintBody(this.wallet.address);
 
-        const contractAddress = Address.parse('EQAEdOi-1qE5KdIAv9qejm-hj64nuo8qJqQWQGNSdR8btw-c');
+        let envAddr = process.env.COLLECTION_ADDRESS;
+        if (!envAddr) throw Error('Please Provide Collection Address');
+
+        const contractAddress = Address.parse(envAddr);
         const collection = new BasicContract(contractAddress);
 
         // get wallet params
