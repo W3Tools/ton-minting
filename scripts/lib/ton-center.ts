@@ -1,18 +1,24 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 
+import * as fs from 'fs';
+import { Builder, Cell, contractAddress } from 'ton';
 import { OpenedContract, WalletContractV3R2 } from 'ton';
 import { KeyPair, mnemonicToWalletKey } from 'ton-crypto';
 import { TonClient, TonClientParameters } from 'ton/dist/client/TonClient';
+import BasicContract from './base-contract';
 
 export class TonCenter {
     uri: string;
+    workchain: number;
+
     ton: TonClient;
     wallet: WalletContractV3R2;
     keyPair: KeyPair;
     constructor() {
         this.ton = this.getClient();
         this.uri = 'https://testnet.tonscan.org/address';
+        this.workchain = 0;
     }
 
     static sleep(ms: number) {
@@ -54,5 +60,59 @@ export class TonCenter {
         const isDeployed = await this.ton.isContractDeployed(this.wallet.address);
         if (!isDeployed) throw Error(`Wallet ${this.wallet.address.toString()} Not Found!`);
         console.log(`Wallet address: ${this.uri}/${this.wallet.address.toString()}`);
+    }
+
+    async createContract(data: Cell): Promise<BasicContract> {
+        // get contract build out from file
+        const code = Cell.fromBoc(fs.readFileSync(`output/contract.cell`))[0];
+        const contract = contractAddress(this.workchain, { code: code, data: data });
+        console.log(`contract address: ${this.uri}/${contract.toString()}`);
+
+        // check the contract is deployed
+        const isDeployed = await this.ton.isContractDeployed(contract);
+        if (isDeployed) throw Error('Contract Already Deployed');
+
+        return new BasicContract(contract, { code, data });
+    }
+
+    // Handler for contract content
+    stringToCell(str: string) {
+        let cell = new Builder();
+        cell.storeBuffer(Buffer.from(str));
+        return cell.endCell();
+    }
+
+    encodeContent(content: string) {
+        let data = Buffer.from(content);
+        let offChainPrefix = Buffer.from([0x01]);
+        data = Buffer.concat([offChainPrefix, data]);
+        return this.makeSnakeCell(data);
+    }
+
+    makeSnakeCell(data: Buffer) {
+        let chunks = this.bufferToChunks(data, 127);
+        let rootCell: Builder = new Builder();
+        let curCell = rootCell;
+
+        for (let i = 0; i < chunks.length; i++) {
+            let chunk = chunks[i];
+            curCell.storeBuffer(chunk);
+
+            if (chunks[i + 1]) {
+                let netCell: Builder = new Builder();
+                curCell.storeRef(netCell);
+                curCell = netCell;
+            }
+        }
+        return rootCell.endCell();
+    }
+
+    bufferToChunks(buff: Buffer, chunkSize: number) {
+        let chunks: Buffer[] = [];
+        while (buff.byteLength > 0) {
+            chunks.push(buff.slice(0, chunkSize));
+            buff = buff.slice(chunkSize);
+        }
+        return chunks;
     }
 }
