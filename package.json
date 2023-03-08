@@ -12,7 +12,9 @@
     "build-collection": "npx func-js --boc output/contract.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft-collection.fc",
     "deploy-collection": "npx ts-node --cwd scripts deploy_collection.ts",
     "build-nft-single": "npx func-js --boc output/contract.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft-single.fc",
-    "deploy-nft-single": "npx ts-node --cwd scripts deploy_nft_single.ts"
+    "deploy-nft-single": "npx ts-node --cwd scripts deploy_nft_single.ts",
+    "build-nft": "npx func-js --boc output/nft.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft.fc",
+    "deploy-nft": "npx ts-node --cwd scripts deploy_nft.ts"
   },
   "dependencies": {
     "@ton-community/func-js": "^0.5.0",

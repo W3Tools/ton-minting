@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import { Address, Builder, Cell } from 'ton';
 import { TonCenter } from './lib/ton-center';
 
@@ -7,19 +8,23 @@ export class DeployCollection extends TonCenter {
     }
 
     getDeployData(owner: Address) {
+        let commonContent: Builder = new Builder();
+        commonContent.storeBuffer(Buffer.from('https://file-8sgle4kt.w3tools.app/ton/'));
+
         let contentCell: Builder = new Builder();
         contentCell.storeRef(this.encodeContent('https://file-8sgle4kt.w3tools.app/ton/nft.json'));
+        contentCell.storeRef(commonContent.endCell());
 
         let royaltyCell: Builder = new Builder();
-        royaltyCell.storeUint(10, 16);
+        royaltyCell.storeUint(9, 16);
         royaltyCell.storeUint(20, 16);
         royaltyCell.storeAddress(owner);
 
         let dataCell: Builder = new Builder();
         dataCell.storeAddress(owner); // owner_address
         dataCell.storeUint(0, 64); // next_item_index
-        dataCell.storeRef(contentCell);
-        dataCell.storeRef(new Cell()); // nft_item_code
+        dataCell.storeRef(contentCell.endCell());
+        dataCell.storeRef(Cell.fromBoc(fs.readFileSync(`output/nft.cell`))[0]); // nft_item_code
         dataCell.storeRef(royaltyCell); // royalty_params
 
         return dataCell.endCell();
@@ -47,7 +52,6 @@ export class DeployCollection extends TonCenter {
         await this.awaitTransaction(walletC, seqno);
         console.log('transaction confirmed!');
     }
-
 }
 
 new DeployCollection().main();
