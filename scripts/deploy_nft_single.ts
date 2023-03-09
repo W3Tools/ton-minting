@@ -29,7 +29,7 @@ export class DeployNFTSingle extends TonCenter {
         const dataCell = this.getDeployData(this.wallet.address);
 
         // get new contract address
-        const newContract = await this.createContract(dataCell);
+        const newContract = await this.createContract(dataCell,"nft-single.cell");
 
         // get wallet params
         const walletC = this.ton.open(this.wallet);

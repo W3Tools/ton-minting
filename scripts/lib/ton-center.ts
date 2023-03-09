@@ -62,15 +62,16 @@ export class TonCenter {
         console.log(`Wallet address: ${this.uri}/${this.wallet.address.toString()}`);
     }
 
-    async createContract(data: Cell): Promise<BasicContract> {
+    async createContract(data: Cell, cellFile?: string): Promise<BasicContract> {
         // get contract build out from file
-        const code = Cell.fromBoc(fs.readFileSync(`output/contract.cell`))[0];
+        let filename = cellFile ? cellFile : 'contract.cell';
+        const code = Cell.fromBoc(fs.readFileSync(`output/${filename}`))[0];
         const contract = contractAddress(this.workchain, { code: code, data: data });
         console.log(`contract address: ${this.uri}/${contract.toString()}`);
 
         // check the contract is deployed
         const isDeployed = await this.ton.isContractDeployed(contract);
-        if (isDeployed) throw Error('Contract Already Deployed');
+        if (isDeployed) throw Error(`Contract ${contract.toString()} Already Deployed`);
 
         return new BasicContract(contract, { code, data });
     }
