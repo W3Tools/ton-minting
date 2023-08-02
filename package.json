@@ -1,31 +1,36 @@
 {
-  "name": "ton-minting",
-  "version": "1.0.0",
-  "description": "Ton collection creation, and deploy nft",
-  "main": "main.ts",
-  "repository": "https://github.com/W3Tools/ton-minting.git",
-  "author": "W3Tools",
-  "license": "GPL-3.0",
-  "scripts": {
-    "build": "npx func-js --boc output/contract.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc",
-    "deploy": "npx ts-node --cwd scripts",
-    "build-collection": "npx func-js --boc output/contract.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft-collection.fc",
-    "deploy-collection": "npx ts-node --cwd scripts deploy_collection.ts",
-    "build-nft-single": "npx func-js --boc output/nft-single.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft-single.fc",
-    "deploy-nft-single": "npx ts-node --cwd scripts deploy_nft_single.ts",
-    "build-nft": "npx func-js --boc output/nft.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft.fc",
-    "deploy-nft": "npx ts-node --cwd scripts deploy_nft.ts"
-  },
-  "dependencies": {
-    "@ton-community/func-js": "^0.5.0",
-    "dotenv": "^16.0.3",
-    "ton": "^13.4.1",
-    "ton-core": "^0.48.0",
-    "ton-crypto": "^3.2.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.5"
-  },
-  "devDependencies": {
-    "@types/node": "^18.14.6"
-  }
+    "name": "ton-minting",
+    "version": "1.0.0",
+    "description": "Ton collection creation, and deploy nft",
+    "main": "main.ts",
+    "repository": "https://github.com/W3Tools/ton-minting.git",
+    "author": "W3Tools",
+    "license": "GPL-3.0",
+    "scripts": {
+        "build": "npx func-js --boc output/contract.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc",
+        "deploy": "npx ts-node --cwd scripts",
+        "build-collection": "npx func-js --boc output/contract.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft-collection.fc",
+        "deploy-collection": "npx ts-node --cwd scripts deploy_collection.ts",
+        "build-nft-single": "npx func-js --boc output/nft-single.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft-single.fc",
+        "deploy-nft-single": "npx ts-node --cwd scripts deploy_nft_single.ts",
+        "build-nft": "npx func-js --boc output/nft.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc nft.fc",
+        "deploy-nft": "npx ts-node --cwd scripts deploy_nft.ts",
+        "deploy-sbt-collection": "npx ts-node --cwd scripts deploy_sbt_collection.ts",
+        "build-sbt-item": "npx func-js --boc output/sbt-item.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc sbt-item.fc",
+        "deploy-sbt-item": "npx ts-node --cwd scripts deploy_sbt_item.ts",
+        "build-sbt-single": "npx func-js --boc output/sbt-single.cell -C contracts lib/stdlib.fc lib/params.fc lib/op-code.fc sbt-single.fc",
+        "deploy-sbt-single": "npx ts-node --cwd scripts deploy_sbt_single.ts"
+    },
+    "dependencies": {
+        "@ton-community/func-js": "^0.5.0",
+        "dotenv": "^16.0.3",
+        "ton": "^13.4.1",
+        "ton-core": "^0.48.0",
+        "ton-crypto": "^3.2.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.5"
+    },
+    "devDependencies": {
+        "@types/node": "^18.14.6"
+    }
 }
